@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: todoappdb
+    ports:
+      - '3306:3306'
+    networks:
+      - todo-network
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    depends_on:
+      - db
+    networks:
+      - todo-network
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    networks:
+      - todo-network
+networks:
+  todo-network:
+    driver: bridge
